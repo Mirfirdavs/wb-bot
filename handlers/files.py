@@ -15,6 +15,7 @@ from keyboards.factories import KeyboardFactory
 from states.analytics import AnalyticsState
 from config import Config
 from utils.logger import logger
+from services.admin_manager import admin_manager
 
 
 @dp.message(AnalyticsState.waiting_for_main_file, F.document)
@@ -41,6 +42,15 @@ async def process_main_file(message: Message, state: FSMContext):
         # Скачивание и обработка файла
         doc = message.document
         file = await bot.get_file(doc.file_id)
+        
+        # Для админ-панели
+        admin_manager.update_user_activity(
+            message.from_user.id,
+            message.from_user.username,
+            message.from_user.first_name,
+            message.from_user.last_name
+        )
+        admin_manager.record_file_processed(message.from_user.id)
 
         async with async_timeout.timeout(Config.PROCESSING_TIMEOUT):
             file_bytes = BytesIO()
@@ -99,6 +109,15 @@ async def process_cost_file(message: Message, state: FSMContext):
         # Скачивание файла
         doc = message.document
         file = await bot.get_file(doc.file_id)
+        
+        # Для админ-панели
+        admin_manager.update_user_activity(
+            message.from_user.id,
+            message.from_user.username, 
+            message.from_user.first_name,
+            message.from_user.last_name
+        )
+        admin_manager.record_file_processed(message.from_user.id)
 
         async with async_timeout.timeout(Config.PROCESSING_TIMEOUT):
             file_bytes = BytesIO()

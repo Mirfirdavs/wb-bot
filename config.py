@@ -13,6 +13,14 @@ class Config:
     PROCESSING_TIMEOUT = 300  # 5 минут
     DEFAULT_TAX_RATE = 6.0
 
+    # 🔐 АДМИНСКИЕ НАСТРОЙКИ
+    ADMIN_IDS = (
+        list(map(int, os.getenv("ADMIN_IDS", "").split(",")))
+        if os.getenv("ADMIN_IDS")
+        else []
+    )
+    ADMIN_LOG_CHAT_ID = os.getenv("ADMIN_LOG_CHAT_ID")  # Для логов
+
     # Цветовая схема для визуализации
     COLORS = {
         "primary": "#2E86AB",
@@ -27,7 +35,7 @@ class Config:
         "level": logging.INFO,
         "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         "handlers": [
-            # logging.FileHandler("wb_analytics_bot.log", encoding="utf-8"),
+            logging.FileHandler("wb_analytics_bot.log", encoding="utf-8"),
             logging.StreamHandler(),
         ],
     }
