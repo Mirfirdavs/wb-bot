@@ -105,6 +105,9 @@ async def new_calculation(callback: CallbackQuery, state: FSMContext):
 @dp.message()
 async def handle_other_messages(message: Message):
     """Обработчик всех остальных сообщений"""
+    if message.text and message.text.startswith("/"):
+        return  # ничего не делаем, чтобы не мешать командам
+    
     if message.document:
         await message.answer(
             "⚠️ <b>Сначала выберите налоговую ставку!</b>\n"

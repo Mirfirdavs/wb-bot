@@ -20,9 +20,11 @@ def is_admin(user_id: int) -> bool:
 
 # ===== ОСНОВНЫЕ КОМАНДЫ =====
 
-@dp.message(Command("admin"))
-async def cmd_admin(message: Message):
+@dp.message(Command("admin"), F.chat.type == 'private')
+async def cmd_admin(message: Message, state: FSMContext):
     """Команда админ-панели"""
+    await state.clear()  # опционально: сбросить состояние
+    
     if not is_admin(message.from_user.id):
         await message.answer("⛔ У вас нет прав доступа к админ-панели.")
         return
