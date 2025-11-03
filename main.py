@@ -4,6 +4,7 @@ from bot.dispatcher import dp
 from handlers import register_handlers
 from services.session_manager import session_manager
 from utils.logger import logger
+from handlers import referral
 
 
 async def main():
